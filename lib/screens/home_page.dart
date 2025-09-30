@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:login/data/game_store_data.dart';
 import 'package:login/screens/gamedetail_page.dart';
 import 'package:login/screens/login_page.dart';
-import 'package:login/screens/profile_page.dart';
 
 class HomePage extends StatelessWidget {
   final String username;
