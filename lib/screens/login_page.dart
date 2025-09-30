@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:login/screens/home_page.dart';
 
@@ -14,16 +13,39 @@ class _LoginPageState extends State<LoginPage> {
   final usernameC = TextEditingController();
   final passwordC = TextEditingController();
 
-  bool isLoginSuccess = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("login page"), centerTitle: true),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [_usernameField(), _passField(), _btnLogin(context)],
+      // 🎮 background gradient
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.videogame_asset,
+                  size: 80, color: Colors.cyanAccent),
+              const SizedBox(height: 10),
+              const Text(
+                "GEMANIA",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.cyanAccent,
+                ),
+              ),
+              const SizedBox(height: 40),
+              _usernameField(),
+              _passField(),
+              _btnLogin(context),
+            ],
+          ),
         ),
       ),
     );
@@ -31,21 +53,27 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _usernameField() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
       child: TextFormField(
         controller: usernameC,
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
         decoration: InputDecoration(
-          hintText: "Username...",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+          prefixIcon: const Icon(Icons.person, color: Colors.cyanAccent),
+          hintText: "Enter Username",
+          hintStyle: const TextStyle(color: Colors.white70),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.purpleAccent, width: 2),
           ),
-          fillColor: Colors.pinkAccent,
           filled: true,
+          fillColor: Colors.black.withOpacity(0.4),
         ),
       ),
     );
@@ -53,22 +81,28 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _passField() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
       child: TextFormField(
         controller: passwordC,
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         obscureText: true,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
         decoration: InputDecoration(
-          hintText: "Password...",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+          prefixIcon: const Icon(Icons.lock, color: Colors.cyanAccent),
+          hintText: "Enter Password",
+          hintStyle: const TextStyle(color: Colors.white70),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.purpleAccent, width: 2),
           ),
-          fillColor: Colors.pinkAccent,
           filled: true,
+          fillColor: Colors.black.withOpacity(0.4),
         ),
       ),
     );
@@ -76,18 +110,26 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _btnLogin(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       width: MediaQuery.of(context).size.width,
       child: ElevatedButton(
         onPressed: () {
           _login(context);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: (isLoginSuccess) ? Colors.blue : Colors.red,
+          backgroundColor: Colors.cyanAccent, // 🎨 tombol senada
+          shadowColor: Colors.cyanAccent,
+          elevation: 12,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          padding: const EdgeInsets.symmetric(vertical: 15),
         ),
-        child: Text(
+        child: const Text(
           "LOGIN",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
       ),
     );
@@ -95,35 +137,38 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login(BuildContext context) {
     log("LOGIN");
-    String username, password;
-    String text = "";
-    username = usernameC.text.trim();
-    password = passwordC.text.trim(); //buat ngilangin spasi diawal
-    log("Username : $username");
-    log("password : $password");
-    if (password == "1234") {
-      //loginberhasil
-      setState(() {
-        text = "login berhasil";
-        isLoginSuccess = true;
+    String username = usernameC.text.trim();
+    String password = passwordC.text.trim();
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context){
-              return HomePage(username: username,);
-            }
-          )
-        );
-      });
+    log("Username : $username");
+    log("Password : $password");
+
+    String text = "";
+
+    if (password == "1234") {
+      text = "Login berhasil ✅";
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return HomePage(username: username);
+          },
+        ),
+      );
     } else {
-      //logingagal
-      setState(() {
-        text = "login gagal";
-        isLoginSuccess = false;
-      });
+      text = "Login gagal ❌";
     }
-    SnackBar snackBar = SnackBar(content: Text(text));
+
+    SnackBar snackBar = SnackBar(
+      backgroundColor: Colors.black87,
+      content: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.cyanAccent,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
